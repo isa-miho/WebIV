@@ -7,65 +7,49 @@
 <form action='{{ url("produto/salvar") }}' method='POST'>
     @csrf
     <div class='row'>
-        <div class="col-md-1 mb-3">
+        <div class="col-md-2 mb-3">
             <label class="form-label">ID</label>
-            <input readonly type="text" class="form-control" name="id" value='{{$produto->id}}'>
+            <input readonly type="text" class="form-control" name="id" value='{{ $produto->id }}'>
         </div>
-        <div class="col-md-5 mb-3">
-            <label class="form-label">Nome</label>
-            <input type="text" class="form-control" name="nome" value='{{old("nome", $produto->nome)}}'>
+        <div class="col-md-6 mb-3">
+            <label for="descricao" class="form-label">Descrição</label>
+            <input type="text" class="form-control @error('descricao') is-invalid @enderror" id="descricao" name="descricao" value='{{ old("descricao", $produto->descricao) }}'>
         </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Categoria</label>
-            <select class='form-select' name="categoria_id" id="categoria_id">
-                <option value="">Selecione...</option>
-                @foreach($categorias as $cat)
-                    <option {{ $cat->id == old("categoria_id", $produto->categoria_id) ? "selected" : "" }} value="{{$cat->id}}" data-margem="{{ $cat->margem_lucro }}">{{$cat->descricao}}</option>
+        <div class="col-md-4 mb-3">
+            <label for="categoria_id" class="form-label">Categoria</label>
+            <select class='form-select @error('categoria_id') is-invalid @enderror' name="categoria_id" id="categoria_id">
+                <option value="" data-margem="0">Selecione...</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id }}" data-margem="{{ $categoria->margem_lucro }}"
+                        {{ $categoria->id == old("categoria_id", $produto->categoria_id) ? "selected" : "" }}>
+                        {{ $categoria->descricao }} ({{ number_format($categoria->margem_lucro, 2, ',', '.') }}%)
+                    </option>
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Embalagem</label>
-            <input type="text" class="form-control" name="embalagem" value='{{old("embalagem", $produto->embalagem)}}' placeholder="Pacote, Caixa, Unidade...">
-        </div>
     </div>
     <div class='row'>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Código de barras</label>
-            <input type="text" class="form-control" name="codigo_barra" value='{{old("codigo_barra", $produto->codigo_barra)}}'>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Valor de Compra</label>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Valor de compra</label>
             <div class="input-group">
                 <span class="input-group-text">R$</span>
-                <input type="text" class="form-control dinheiro" data-alvo="valor_compra"
-                    value='{{ old("valor_compra", $produto->valor_compra) !== "" ? number_format((float) old("valor_compra", $produto->valor_compra), 2, ",", ".") : "" }}' placeholder="0,00">
+                <input type="text" class="form-control dinheiro @error('valor_compra') is-invalid @enderror" data-alvo="valor_compra" placeholder="0,00"
+                    value='{{ old("valor_compra", $produto->valor_compra) !== "" ? number_format((float) old("valor_compra", $produto->valor_compra), 2, ",", ".") : "" }}'>
             </div>
-            <input type="hidden" name="valor_compra" id="valor_compra" value='{{old("valor_compra", $produto->valor_compra)}}'>
+            <input type="hidden" name="valor_compra" id="valor_compra" value='{{ old("valor_compra", $produto->valor_compra) }}'>
+            <div class="form-text">É atualizado automaticamente a cada compra.</div>
         </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Valor de Venda</label>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Valor de venda</label>
             <div class="input-group">
                 <span class="input-group-text">R$</span>
-                <input type="text" class="form-control dinheiro" data-alvo="valor_venda" id="valor_venda_display"
-                    value='{{ old("valor_venda", $produto->valor_venda) !== "" ? number_format((float) old("valor_venda", $produto->valor_venda), 2, ",", ".") : "" }}' placeholder="0,00">
+                <input readonly type="text" class="form-control" id="valor_venda">
             </div>
-            <input type="hidden" name="valor_venda" id="valor_venda" value='{{old("valor_venda", $produto->valor_venda)}}'>
-            <button type="button" class="btn btn-link btn-sm px-0" id="sugerir">Calcular pela margem da categoria</button>
+            <div class="form-text">Calculado: valor de compra + margem da categoria.</div>
         </div>
-    </div>
-    <div class='row'>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Quantidade em Estoque</label>
-            <input type="number" min="0" class="form-control" name="quantidade_estoque" value='{{old("quantidade_estoque", $produto->quantidade_estoque)}}'>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Quantidade mínima</label>
-            <input type="number" min="0" class="form-control" name="qtde_minima" value='{{old("qtde_minima", $produto->qtde_minima)}}'>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label class="form-label">Quantidade máxima</label>
-            <input type="number" min="0" class="form-control" name="qtde_maxima" value='{{old("qtde_maxima", $produto->qtde_maxima)}}'>
+        <div class="col-md-4 mb-3">
+            <label for="quantidade_estoque" class="form-label">Quantidade em estoque</label>
+            <input type="number" min="0" class="form-control @error('quantidade_estoque') is-invalid @enderror" id="quantidade_estoque" name="quantidade_estoque" value='{{ old("quantidade_estoque", $produto->quantidade_estoque) }}'>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
@@ -76,16 +60,13 @@
 @section('scripts')
 <script>
     // valor de venda = valor de compra + margem de lucro da categoria
-    document.getElementById('sugerir').addEventListener('click', function () {
-        let opcao = document.getElementById('categoria_id').selectedOptions[0];
+    function calcularVenda() {
         let compra = parseFloat(document.getElementById('valor_compra').value || 0);
-        if (!opcao.value || compra == 0) {
-            alert('Escolha a categoria e informe o valor de compra.');
-            return;
-        }
-        let venda = (compra * (1 + parseFloat(opcao.dataset.margem) / 100)).toFixed(2);
-        document.getElementById('valor_venda').value = venda;
-        document.getElementById('valor_venda_display').value = formatarDinheiro(venda);
-    });
+        let margem = parseFloat(document.getElementById('categoria_id').selectedOptions[0].dataset.margem || 0);
+        document.getElementById('valor_venda').value = formatarDinheiro(compra * (1 + margem / 100));
+    }
+    document.getElementById('categoria_id').addEventListener('change', calcularVenda);
+    document.getElementById('valor_compra').addEventListener('change', calcularVenda);
+    calcularVenda();
 </script>
 @endsection

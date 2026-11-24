@@ -14,9 +14,4 @@ class Fornecedor extends Model
     {
         return $this->hasMany(Compra::class);
     }
-
-    public function orcamentosCompra(): HasMany
-    {
-        return $this->hasMany(OrcamentoCompra::class);
-    }
 }

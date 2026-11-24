@@ -4,8 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-// Usado nos itens do orçamento de venda e da venda
-// (o valor vem do cadastro do produto, por isso não é validado aqui)
 class ItemVendaRequest extends FormRequest
 {
     public function authorize(): bool

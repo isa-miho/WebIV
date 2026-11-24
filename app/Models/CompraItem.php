@@ -14,15 +14,4 @@ class CompraItem extends Model
     {
         return $this->belongsTo(Produto::class);
     }
-
-    public function cabecalho(): BelongsTo
-    {
-        return $this->belongsTo(Compra::class, 'compra_id');
-    }
-
-    // quantidade x valor unitário
-    public function subtotal(): float
-    {
-        return $this->quantidade * $this->valor;
-    }
 }

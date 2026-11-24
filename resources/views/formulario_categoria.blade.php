@@ -9,7 +9,7 @@
     <div class='row'>
         <div class="col-md-2 mb-3">
             <label for="id" class="form-label">ID</label>
-            <input readonly type="text" class="form-control" id="id" name="id" value='{{$categoria->id}}'>
+            <input readonly type="text" class="form-control" id="id" name="id" value='{{ $categoria->id }}'>
         </div>
         <div class="col-md-6 mb-3">
             <label for="descricao" class="form-label">Descrição</label>
@@ -17,7 +17,10 @@
         </div>
         <div class="col-md-4 mb-3">
             <label for="margem_lucro" class="form-label">Margem de lucro (%)</label>
-            <input type="number" step="0.01" min="0" class="form-control" id="margem_lucro" name="margem_lucro" value='{{ old("margem_lucro", $categoria->margem_lucro) }}'>
+            <input type="number" step="0.01" min="0" class="form-control @error('margem_lucro') is-invalid @enderror" id="margem_lucro" name="margem_lucro" value='{{ old("margem_lucro", $categoria->margem_lucro) }}'>
+            @if($categoria->id != 0)
+                <div class="form-text">Se mudar a margem, o preço de venda dos produtos desta categoria é recalculado.</div>
+            @endif
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>

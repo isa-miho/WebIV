@@ -15,9 +15,16 @@ class Produto extends Model
         return $this->belongsTo(Categoria::class);
     }
 
-    // true quando o estoque está abaixo do mínimo
-    public function estoqueBaixo(): bool
+    // valor de venda = valor de compra + margem de lucro (%)
+    public static function calcularValorVenda($valorCompra, $margem): float
     {
-        return $this->qtde_minima > 0 && $this->quantidade_estoque < $this->qtde_minima;
+        return round($valorCompra * (1 + $margem / 100), 2);
+    }
+
+    // Atualiza o valor de venda pela margem da categoria do produto
+    public function atualizarValorVenda(): void
+    {
+        $margem = $this->categoria ? $this->categoria->margem_lucro : 0;
+        $this->valor_venda = self::calcularValorVenda($this->valor_compra, $margem);
     }
 }

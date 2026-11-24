@@ -14,9 +14,4 @@ class Cliente extends Model
     {
         return $this->hasMany(Venda::class);
     }
-
-    public function orcamentosVenda(): HasMany
-    {
-        return $this->hasMany(OrcamentoVenda::class);
-    }
 }

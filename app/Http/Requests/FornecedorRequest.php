@@ -1,28 +1,33 @@
 <?php
+
 namespace App\Http\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class FornecedorRequest extends FormRequest
 {
-    public function authorize(): bool { return true; }
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     public function rules(): array
     {
         return [
-            'razao_social'  => ['required', 'min:3'],
-            'cnpj'          => ['required'],
-            'email'         => ['required', 'email'],
+            'nome'      => ['required', 'min:3'],
+            'documento' => ['required', 'min:11'],
+            'email'     => ['nullable', 'email'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'razao_social.required' => 'A Razão Social é obrigatória',
-            'razao_social.min'      => 'A Razão Social deve ter pelo menos 3 caracteres',
-            'cnpj.required'         => 'O CNPJ é obrigatório',
-            'email.required'        => 'O E-mail é obrigatório',
-            'email.email'           => 'E-mail inválido',
+            'nome.required'      => 'O Nome é obrigatório',
+            'nome.min'           => 'O Nome deve ter pelo menos 3 caracteres',
+            'documento.required' => 'O Documento (CNPJ ou CPF) é obrigatório',
+            'documento.min'      => 'O Documento deve ter pelo menos 11 caracteres',
+            'email.email'        => 'E-mail inválido',
         ];
     }
 }

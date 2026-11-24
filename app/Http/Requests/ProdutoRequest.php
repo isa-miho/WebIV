@@ -14,12 +14,9 @@ class ProdutoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome'               => ['required', 'min:3'],
+            'descricao'          => ['required', 'min:3'],
             'valor_compra'       => ['required', 'numeric', 'min:0'],
-            'valor_venda'        => ['required', 'numeric', 'min:0'],
             'quantidade_estoque' => ['required', 'integer', 'min:0'],
-            'qtde_minima'        => ['nullable', 'integer', 'min:0'],
-            'qtde_maxima'        => ['nullable', 'integer', 'min:0'],
             'categoria_id'       => ['required', 'exists:App\Models\Categoria,id'],
         ];
     }
@@ -27,16 +24,14 @@ class ProdutoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nome.required'               => 'O Nome é obrigatório',
-            'nome.min'                    => 'O Nome deve ter pelo menos 3 caracteres',
-            'valor_compra.required'       => 'O Valor de Compra é obrigatório',
-            'valor_compra.numeric'        => 'O Valor de Compra deve ser numérico',
-            'valor_venda.required'        => 'O Valor de Venda é obrigatório',
-            'valor_venda.numeric'         => 'O Valor de Venda deve ser numérico',
-            'quantidade_estoque.required' => 'A Quantidade em Estoque é obrigatória',
-            'quantidade_estoque.integer'  => 'A Quantidade deve ser um número inteiro',
-            'qtde_minima.integer'         => 'A Quantidade mínima deve ser um número inteiro',
-            'qtde_maxima.integer'         => 'A Quantidade máxima deve ser um número inteiro',
+            'descricao.required'          => 'A Descrição é obrigatória',
+            'descricao.min'               => 'A Descrição deve ter pelo menos 3 caracteres',
+            'valor_compra.required'       => 'O Valor de compra é obrigatório',
+            'valor_compra.numeric'        => 'O Valor de compra deve ser numérico',
+            'valor_compra.min'            => 'O Valor de compra não pode ser negativo',
+            'quantidade_estoque.required' => 'A Quantidade em estoque é obrigatória',
+            'quantidade_estoque.integer'  => 'A Quantidade em estoque deve ser um número inteiro',
+            'quantidade_estoque.min'      => 'A Quantidade em estoque não pode ser negativa',
             'categoria_id.required'       => 'A Categoria é obrigatória',
             'categoria_id.exists'         => 'Categoria inválida',
         ];

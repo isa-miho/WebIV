@@ -8,19 +8,18 @@ use App\Models\Fornecedor;
 class FornecedorController extends Controller
 {
     function listar() {
-        $fornecedores = Fornecedor::orderBy('razao_social')->paginate(10);
+        $fornecedores = Fornecedor::orderBy('nome')->paginate(10);
         return view('listagem_fornecedor', compact('fornecedores'));
     }
 
     function novo() {
         $fornecedor = new Fornecedor();
-        $fornecedor->id            = 0;
-        $fornecedor->razao_social  = '';
-        $fornecedor->nome_fantasia = '';
-        $fornecedor->endereco      = '';
-        $fornecedor->fone          = '';
-        $fornecedor->email         = '';
-        $fornecedor->cnpj          = '';
+        $fornecedor->id = 0;
+        $fornecedor->nome = '';
+        $fornecedor->documento = '';
+        $fornecedor->email = '';
+        $fornecedor->endereco = '';
+        $fornecedor->telefone = '';
         return view('formulario_fornecedor', compact('fornecedor'));
     }
 
@@ -30,14 +29,13 @@ class FornecedorController extends Controller
         } else {
             $fornecedor = Fornecedor::find($request->id);
         }
-        $fornecedor->razao_social  = $request->razao_social;
-        $fornecedor->nome_fantasia = $request->nome_fantasia;
-        $fornecedor->endereco      = $request->endereco;
-        $fornecedor->fone          = $request->fone;
-        $fornecedor->email         = $request->email;
-        $fornecedor->cnpj          = $request->cnpj;
+        $fornecedor->nome = $request->nome;
+        $fornecedor->documento = $request->documento;
+        $fornecedor->email = $request->email;
+        $fornecedor->endereco = $request->endereco;
+        $fornecedor->telefone = $request->telefone;
         $fornecedor->save();
-        return redirect('fornecedor/listar');
+        return redirect('fornecedor/listar')->with('mensagem', 'Fornecedor salvo.');
     }
 
     function editar($id) {
@@ -48,9 +46,9 @@ class FornecedorController extends Controller
     function excluir($id) {
         $fornecedor = Fornecedor::find($id);
 
-        if ($fornecedor->compras()->count() > 0 || $fornecedor->orcamentosCompra()->count() > 0) {
+        if ($fornecedor->compras()->exists()) {
             return redirect('fornecedor/listar')
-                ->with('erro', "Não é possível excluir {$fornecedor->razao_social}: o fornecedor possui compras ou orçamentos.");
+                ->with('erro', "Não é possível excluir {$fornecedor->nome}: o fornecedor possui compras.");
         }
 
         $fornecedor->delete();
